@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>犯収法 本人確認方式 遷移早見表</title>
+    <style>
+        :root {
+            --color-available: #10b981;
+            --color-abolished: #ef4444;
+            --color-new: #3b82f6;
+            --bg-light: #f8fafc;
+            --border-color: #e2e8f0;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+        
+        .content {
+            padding: 2rem;
+        }
+        
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: var(--bg-light);
+            border-radius: 8px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .legend-badge {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.75rem;
+        }
+        
+        .badge-available { background: var(--color-available); }
+        .badge-abolished { background: var(--color-abolished); }
+        .badge-new { background: var(--color-new); }
+        
+        h2 {
+            color: #1e293b;
+            font-size: 1.3rem;
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #3b82f6;
+        }
+        
+        h2:first-of-type {
+            margin-top: 0;
+        }
+        
+        .timeline-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+            font-size: 0.85rem;
+        }
+        
+        .timeline-table th,
+        .timeline-table td {
+            border: 1px solid var(--border-color);
+            padding: 0.6rem 0.5rem;
+            text-align: center;
+            vertical-align: middle;
+        }
+        
+        .timeline-table thead th {
+            background: #1e293b;
+            color: white;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+        
+        .timeline-table tbody tr:nth-child(even) {
+            background: var(--bg-light);
+        }
+        
+        .timeline-table tbody tr:hover {
+            background: #e0e7ff;
+        }
+        
+        .timeline-table td.desc {
+            text-align: left;
+            font-size: 0.8rem;
+        }
+        
+        .method-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            min-width: 40px;
+        }
+        
+        .status {
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.7rem;
+            display: inline-block;
+        }
+        
+        .status-available { background: #d1fae5; color: #065f46; }
+        .status-abolished { background: #fee2e2; color: #991b1b; }
+        .status-new { background: #dbeafe; color: #1e40af; }
+        .status-na { background: #f1f5f9; color: #64748b; }
+        
+        .method-category {
+            background: #334155 !important;
+            color: white !important;
+            font-weight: bold;
+        }
+        
+        .arrow {
+            color: #64748b;
+            font-size: 1.2rem;
+        }
+        
+        .highlight-abolished {
+            background: #fef2f2 !important;
+        }
+        
+        .highlight-new {
+            background: #eff6ff !important;
+        }
+        
+        .notes-section {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .notes-section h3 {
+            color: #92400e;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+        
+        .notes-section ul {
+            margin-left: 1.5rem;
+            color: #78350f;
+        }
+        
+        .notes-section li {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        footer {
+            background: #1e293b;
+            color: #94a3b8;
+            padding: 1.5rem 2rem;
+            font-size: 0.8rem;
+        }
+        
+        .small-text {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            
+            .content {
+                padding: 1rem;
+            }
+            
+            .timeline-table {
+                font-size: 0.65rem;
+            }
+            
+            .timeline-table th,
+            .timeline-table td {
+                padding: 0.4rem 0.2rem;
+            }
+            
+            .method-name {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>犯罪収益移転防止法（犯収法）<br>本人確認方式 遷移早見表</h1>
+            <p>施行規則 第6条第1項第1号｜方式名（イロハ順）の変遷</p>
+        </header>
+        
+        <div class="content">
+            <div class="legend">
+                <div class="legend-item">
+                    <span class="legend-badge badge-available">○</span>
+                    <span>利用可能</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-badge badge-abolished">×</span>
+                    <span>廃止</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-badge badge-new">★</span>
+                    <span>新規追加</span>
+                </div>
+            </div>
+
+            <h2>📅 時期別 方式名（イロハ順）の対応表</h2>
+            
+            <table class="timeline-table">
+                <thead>
+                    <tr>
+                        <th>確認方法の内容</th>
+                        <th>～2025年<br>6月23日</th>
+                        <th class="arrow"></th>
+                        <th>2025年6月24日<br>～2027年3月31日</th>
+                        <th class="arrow"></th>
+                        <th>2027年<br>4月1日～</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="method-category">
+                        <td colspan="6">【対面方式】</td>
+                    </tr>
+                    <tr>
+                        <td class="desc">顔写真付き本人確認書類の提示</td>
+                        <td class="method-name">イ</td>
+                        <td class="arrow">→</td>
+                        <td class="method-name">イ</td>
+                        <td class="arrow">→</td>
+                        <td class="method-name">イ</td>
+                    </tr>
+                    <tr>
+                        <td class="desc">顔写真なし書類の提示＋転送不要郵便</td>
+                        <td class="method-name">ロ</td>
+                        <td class="arrow">→</td>
+                        <td class="method-name">ロ</td>
+                        <td class="arrow">→</td>
+                        <td class="method-name">ロ</td>
+                    </tr>
+                    <tr>
+                        <td class="desc">顔写真なし書類2点の提示</td>
+                        <td class="method-name">ハ</td>
+                        <td class="arrow">→</td>
+                        <td class="method-name">ハ</td>
+                        <td class="arrow">→</td>
+                        <td class="method-name">ハ</td>
+                    </tr>
+                    <tr>
+                        <td class="desc">顔写真なし書類＋補完書類の提示</td>
+                        <td class="method-name">ニ</td>
+                        <td class="arrow">→</td>
+                        <td class="method-name">ニ</td>
+                        <td class="arrow">→</td>
+                        <td class="method-name">ニ</td>
+                    </tr>
+                    
+                    <tr class="method-category">
+                        <td colspan="6">【非対面方式（eKYC等）】</td>
+                    </tr>
+                    <tr class="highlight-abolished">
+                        <td class="desc">⚠️ 顔写真付き書類の画像＋本人容貌の画像送信<br><span class="small-text">※2027年4月廃止</span></td>
+                        <td class="method-name">ホ</td>
+                        <td class="arrow">→</td>
+                        <td class="method-name">ホ</td>
+                        <td class="arrow">→</td>
+                        <td><span class="status status-abolished">廃止</span></td>
+                    </tr>
+                    <tr>
+                        <td class="desc">ICチップ情報＋本人容貌の画像送信</td>
+                        <td class="method-name">ヘ</td>
+                        <td class="arrow">→</td>
+                        <td class="method-name">ヘ</td>
+                        <td class="arrow">→</td>
+                        <td class="method-name">ホ</td>
+                    </tr>
+                    <tr>
+                        <td class="desc">書類IC情報＋銀行等への照会<br><span class="small-text">※2027年4月以降は画像不可、IC情報のみ</span></td>
+                        <td class="method-name">ト</td>
+                        <td class="arrow">→</td>
+                        <td class="method-name">ト</td>
+                        <td class="arrow">→</td>
+                        <td class="method-name">ヘ</td>
+                    </tr>
+                    <tr>
+                        <td class="desc">書類IC情報＋転送不要郵便<br><span class="small-text">※2027年4月以降は画像不可、IC情報のみ</span></td>
+                        <td class="method-name">チ</td>
+                        <td class="arrow">→</td>
+                        <td class="method-name">チ</td>
+                        <td class="arrow">→</td>
+                        <td class="method-name">ト</td>
+                    </tr>
+                    <tr class="highlight-abolished">
+                        <td class="desc">⚠️ 書類の写しの送付＋転送不要郵便<br><span class="small-text">※2027年4月廃止</span></td>
+                        <td class="method-name">リ</td>
+                        <td class="arrow">→</td>
+                        <td class="method-name">リ</td>
+                        <td class="arrow">→</td>
+                        <td><span class="status status-abolished">廃止</span></td>
+                    </tr>
+                    <tr>
+                        <td class="desc">給与振込口座開設時等の特例（写し送付）</td>
+                        <td class="method-name">ヌ</td>
+                        <td class="arrow">→</td>
+                        <td class="method-name">ヌ</td>
+                        <td class="arrow">→</td>
+                        <td class="method-name">チ</td>
+                    </tr>
+                    <tr class="highlight-new">
+                        <td class="desc">★ カード代替電磁的記録（スマホ搭載マイナ）<br><span class="small-text">※2025年6月新設</span></td>
+                        <td><span class="status status-na">—</span></td>
+                        <td class="arrow">→</td>
+                        <td class="method-name"><span class="status status-new">ル 新設</span></td>
+                        <td class="arrow">→</td>
+                        <td class="method-name">リ</td>
+                    </tr>
+                    
+                    <tr class="method-category">
+                        <td colspan="6">【郵便・電子認証方式】</td>
+                    </tr>
+                    <tr>
+                        <td class="desc">本人限定受取郵便</td>
+                        <td class="method-name">ル</td>
+                        <td class="arrow">→</td>
+                        <td class="method-name">ヲ</td>
+                        <td class="arrow">→</td>
+                        <td class="method-name">ヌ</td>
+                    </tr>
+                    <tr>
+                        <td class="desc">公的個人認証サービス（JPKI）<br><span class="small-text">※今後の原則方式</span></td>
+                        <td class="method-name">ヲ</td>
+                        <td class="arrow">→</td>
+                        <td class="method-name">ワ</td>
+                        <td class="arrow">→</td>
+                        <td class="method-name">ル</td>
+                    </tr>
+                    <tr>
+                        <td class="desc">電子署名（特定認証業務）</td>
+                        <td class="method-name">ワ</td>
+                        <td class="arrow">→</td>
+                        <td class="method-name">カ</td>
+                        <td class="arrow">→</td>
+                        <td class="method-name">ヲ</td>
+                    </tr>
+                    <tr>
+                        <td class="desc">電子署名（認定認証事業者）</td>
+                        <td class="method-name">カ</td>
+                        <td class="arrow">→</td>
+                        <td class="method-name">ヨ</td>
+                        <td class="arrow">→</td>
+                        <td class="method-name">ワ</td>
+                    </tr>
+                    
+                    <tr class="method-category">
+                        <td colspan="6">【非居住外国人等向け特例】※2027年4月新設</td>
+                    </tr>
+                    <tr class="highlight-new">
+                        <td class="desc">★ 非居住外国人等：写し送付＋転送不要郵便<br><span class="small-text">※2027年4月新設</span></td>
+                        <td><span class="status status-na">—</span></td>
+                        <td class="arrow">→</td>
+                        <td><span class="status status-na">—</span></td>
+                        <td class="arrow">→</td>
+                        <td class="method-name"><span class="status status-new">カ 新設</span></td>
+                    </tr>
+                    <tr class="highlight-new">
+                        <td class="desc">★ 非居住外国人等：画像送信＋転送不要郵便<br><span class="small-text">※2027年4月新設</span></td>
+                        <td><span class="status status-na">—</span></td>
+                        <td class="arrow">→</td>
+                        <td><span class="status status-na">—</span></td>
+                        <td class="arrow">→</td>
+                        <td class="method-name"><span class="status status-new">ヨ 新設</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>📊 方式名（イロハ順）の並び変化</h2>
+            
+            <table class="timeline-table">
+                <thead>
+                    <tr>
+                        <th>時期</th>
+                        <th>方式名の並び（イロハ順）</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="white-space:nowrap;font-weight:bold;">～2025年6月23日</td>
+                        <td style="text-align:left;font-size:1.1rem;letter-spacing:0.3rem;">
+                            イ ロ ハ ニ <span style="color:#ef4444;font-weight:bold;">ホ</span> ヘ ト チ <span style="color:#ef4444;font-weight:bold;">リ</span> ヌ ル ヲ ワ カ
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;font-weight:bold;">2025年6月24日<br>～2027年3月31日</td>
+                        <td style="text-align:left;font-size:1.1rem;letter-spacing:0.3rem;">
+                            イ ロ ハ ニ <span style="color:#ef4444;font-weight:bold;">ホ</span> ヘ ト チ <span style="color:#ef4444;font-weight:bold;">リ</span> ヌ <span style="color:#3b82f6;font-weight:bold;background:#dbeafe;padding:2px 4px;border-radius:4px;">ル★</span> ヲ ワ カ ヨ
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;font-weight:bold;">2027年4月1日～</td>
+                        <td style="text-align:left;font-size:1.1rem;letter-spacing:0.3rem;">
+                            イ ロ ハ ニ <span style="color:#ef4444;text-decoration:line-through;">ホ×</span> ホ ヘ ト <span style="color:#ef4444;text-decoration:line-through;">リ×</span> チ リ ヌ ル ヲ ワ <span style="color:#3b82f6;font-weight:bold;background:#dbeafe;padding:2px 4px;border-radius:4px;">カ★</span> <span style="color:#3b82f6;font-weight:bold;background:#dbeafe;padding:2px 4px;border-radius:4px;">ヨ★</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="notes-section">
+                <h3>⚠️ 重要ポイント</h3>
+                <ul>
+                    <li><strong>方式名（イロハ）が繰り上がる</strong>：2027年4月に現行「ホ」「リ」が廃止されると、条文番号が詰まり、以降の方式名が繰り上がります。</li>
+                    <li><strong>現行ホ方式・リ方式の廃止</strong>：本人確認書類の画像送信（現行ホ）および写しの郵送（現行リ）は、偽造リスクから2027年4月に廃止されます。</li>
+                    <li><strong>JPKI（公的個人認証）が原則方式に</strong>：政府方針として、非対面での本人確認はマイナンバーカードの公的個人認証サービスに原則一本化されます。</li>
+                    <li><strong>スマホ搭載マイナ対応</strong>：2025年6月より「カード代替電磁的記録」（スマホ搭載マイナンバーカード機能）を用いた本人確認が可能になります。</li>
+                    <li><strong>非居住外国人等への特例</strong>：ICチップ付き書類を持たない非居住外国人等向けに、2027年4月より特例方式（カ・ヨ）が新設されます。</li>
+                </ul>
+            </div>
+
+        </div>
+        
+        <footer>
+            <p>
+                <strong>参考法令</strong>：犯罪による収益の移転防止に関する法律施行規則 第6条第1項第1号<br>
+                <strong>情報源</strong>：警察庁、金融庁、デジタル庁、TRUSTDOCK等の公表資料に基づく（2025年1月時点）<br>
+                <strong>注意</strong>：本資料は参考情報です。最新の法令・規則は各省庁の公式発表をご確認ください。
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
